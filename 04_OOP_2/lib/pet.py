@@ -25,7 +25,7 @@ class Pet:
     @classmethod
     def increase_pet_count(cls):
         cls.total_pets += 1
-        print(f"The {cls} class has created {cls.total_pets} pet instances")
+        print(f"The {cls.__name__} class has created {cls.total_pets} pet instances")
 
     def print_pet_details(self):
         print(
