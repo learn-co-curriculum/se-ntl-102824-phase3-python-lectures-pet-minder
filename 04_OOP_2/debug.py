@@ -15,9 +15,11 @@ princess_grace = Cat(
     "princess grace", 7, "domestic longhair", "affectionate", "gracy.png", True
 )
 
-
+# Instances of the owner class
 jess = Owner("jess", "jess@mail.com")
 chris = Owner("chris", "chris@mail.com")
+
+# calling intance method on owners which create association with a pet
 jess.adopt_pet(cookie)
 jess.adopt_pet(rose)
 chris.adopt_pet(princess_grace)

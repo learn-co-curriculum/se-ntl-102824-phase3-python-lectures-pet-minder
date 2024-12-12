@@ -4,7 +4,8 @@
 
 class Pet:
 
-    total_pets = 0
+    _total_pets = 0
+
     all = []
 
     def __init__(self, name, age, breed, temperament, image_url):
@@ -14,9 +15,10 @@ class Pet:
         self.temperament = temperament
         self.image_url = image_url
         # Pet.total_pets += 1
-        # Pet.increase_pet_count()
-        self.__class__.increase_pet_count()
-        self.__class__.all.append(self)
+        Pet.increase_pet_count()  # reverting to using Pet name explicity because Cat's inheritance of Pet was causing a copy, Pet._total_pets to be incremented when creating Cat instances
+        # self.__class__.increase_pet_count()
+        # self.__class__.all.append(self)
+        Pet.all.append(self)
         self.owner = None
 
     # 6✅. Create a class method increase_pets that will increment total_pets
@@ -24,8 +26,10 @@ class Pet:
 
     @classmethod
     def increase_pet_count(cls):
-        cls.total_pets += 1
-        print(f"The {cls.__name__} class has created {cls.total_pets} pet instances")
+        if not hasattr(Pet, "_total_pets"):
+            Pet._total_pets = 0
+        Pet._total_pets += 1
+        print(f"The {cls.__name__} class has created {Pet._total_pets} pet instances")
 
     def print_pet_details(self):
         print(
