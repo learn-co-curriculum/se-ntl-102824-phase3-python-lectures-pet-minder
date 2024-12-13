@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Class Attributes and Methods
+from lib.job import Job
 
 
 class Pet:
@@ -9,7 +10,7 @@ class Pet:
     all = []
 
     def __init__(self, name, age, breed, temperament, image_url):
-        self.name = name
+        self.name = name  # this will use the property settter to assign the value
         self.age = age
         self.breed = breed
         self.temperament = temperament
@@ -41,6 +42,15 @@ class Pet:
             image_url:{self.image_url}
         """
         )
+
+    def get_jobs(self):
+        return [job for job in Job.all if job.pet == self]
+
+    def get_handlers(self):
+        return [job.handler for job in self.get_jobs()]
+
+    def book_job(self, time, duration, request, handler):
+        return Job(time, duration, request, self, handler)
 
     def __repr__(self):
         return f"<Pet name: {self.name} | breed: {self.breed} >"
