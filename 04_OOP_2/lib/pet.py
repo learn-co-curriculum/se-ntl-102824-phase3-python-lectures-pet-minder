@@ -9,6 +9,15 @@ class Pet:
 
     all = []
 
+    # 6✅. Create a class method increase_pets that will increment total_pets
+    # replace Pet.total_pets += 1 in __init__ with increase_pets()
+    @classmethod
+    def increase_pet_count(cls):
+        if not hasattr(Pet, "_total_pets"):
+            Pet._total_pets = 0
+        Pet._total_pets += 1
+        print(f"The {cls.__name__} class has created {Pet._total_pets} pet instances")
+
     def __init__(self, name, age, breed, temperament, image_url):
         self.name = name  # this will use the property settter to assign the value
         self.age = age
@@ -20,17 +29,29 @@ class Pet:
         # self.__class__.increase_pet_count()
         # self.__class__.all.append(self)
         Pet.all.append(self)
-        self.owner = None
+        self._owner = None  # This bypasses the property setter method and assigns None to the protected attr directly
 
-    # 6✅. Create a class method increase_pets that will increment total_pets
-    # replace Pet.total_pets += 1 in __init__ with increase_pets()
+    @property
+    def name(self):
+        return self._name
 
-    @classmethod
-    def increase_pet_count(cls):
-        if not hasattr(Pet, "_total_pets"):
-            Pet._total_pets = 0
-        Pet._total_pets += 1
-        print(f"The {cls.__name__} class has created {Pet._total_pets} pet instances")
+    @name.setter
+    def name(self, value):
+        if type(value) != "str":
+            raise ValueError("must be string")
+        self._name = value
+
+    @property
+    def owner(self):
+        return self._owner
+
+    @owner.setter
+    def owner(self, value):
+        from lib.owner import Owner
+
+        if not isinstance(value, Owner):
+            raise TypeError("Owner must be an instance of Owner class")
+        self._owner = value
 
     def print_pet_details(self):
         print(
