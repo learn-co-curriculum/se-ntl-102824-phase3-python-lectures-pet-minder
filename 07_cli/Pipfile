@@ -13,6 +13,10 @@ pyparsing = "3.0.9"
 pytest = "7.2.0"
 tomli = "2.0.1"
 ipdb = "0.13.9"
+faker = "*"
+rich = "*"
+prompt-toolkit = "*"
+pick = "*"
 
 [requires]
 python_version = "3.8.13"
