@@ -1,6 +1,7 @@
 import sys
 
 from handler import Handler
+from helpers import *
 from job import Job
 from pet import Pet
 from rich import print
@@ -14,8 +15,13 @@ from rich import print
 # 5. select a menu option to add a pet
 
 
+# TODO: add error handling and messaging
+
+
 # **********************
 # Interface operations
+
+# many fns in this section could reside in helpers
 
 
 def display_welcome():
@@ -33,18 +39,48 @@ def get_main_choice():
     return input("What is your command?")
 
 
+def show_pet_jobs(pet):
+    jobs = Job.get_jobs_by_pet_id(pet.id)
+    # import ipdb
+
+    # ipdb.set_trace()
+    for job in jobs:
+        print(
+            f"{job.id} | {job.request} | {job.date} | {job.notes} | {job.fee:.2f} || with {Handler.find_handler_by_id(job.handler_id).name}"
+        )
+
+
+def handle_pet_choice(choice, pet):
+    if choice == "1":
+        show_pet_jobs(pet)
+    elif choice == "2":
+        add_job_to_pet(pet)
+        show_pet_jobs(pet)
+    elif choice == "3":
+        exit_app()
+    else:
+        return
+
+
+def display_pet_details_submenu(pet):
+    print("1. See a pet's jobs")
+    print("2. Add a job to a pet")
+    print("3. Quit the app")
+    print("4. Return to main menu")
+    choice = input("What would you like to do?")
+    handle_pet_choice(choice, pet)
+
+
 def choose_pet_by_id():
     search_id = input("Enter the number of the pet you want to see")
     pet = Pet.find_pet_by_id(search_id)
     print(
         f"Id: {pet.id}, Name: {pet.name}, Species: {pet.species}, Breed: {pet.breed}, Temperament: {pet.temperament}"
     )
+    display_pet_details_submenu(pet)
 
 
-def display_all_pets():
-    pets = Pet.get_all_pets()
-    for pet in pets:
-        print(f"{pet.id} | {pet.name} | {pet.species}")
+def display_pets_submenu():
     print("What would you like to see?")
     print("1. See more about a pet")
     print("2. Exit app")
@@ -58,8 +94,15 @@ def display_all_pets():
         return
 
 
+def display_all_pets():
+    pets = Pet.get_all_pets()
+    for pet in pets:
+        print(f"{pet.id} | {pet.name} | {pet.species}")
+    display_pets_submenu()
+
+
 def display_goodbye():
-    print("[lime]Thanks for using Pet Minder! Goodbye![/lime]")
+    print("[cyan]Thanks for using Pet Minder! Goodbye![/cyan]")
 
 
 def exit_app():
@@ -70,7 +113,7 @@ def exit_app():
 # *********************
 # command line interface
 if __name__ == "__main__":
-    display_welcome()
+    display_welcome()  # this could be abstracted into a main() fn called here
     while True:
         display_main_menu()
         choice = get_main_choice()
